@@ -18,12 +18,8 @@ const JobRoute = require('./routes/JobRoute');
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.status(200).json({ success: true, msg: "Hello America" });
-});
-
-app.use('/api/v1', UserRoute);
-app.use('/api/v1', JobRoute);
+app.use('/api/v1/auth', UserRoute);
+app.use('/api/v1/job', JobRoute);
 
 
 app.use(NotFoundMiddleware);
@@ -32,7 +28,7 @@ app.use(ErrorHandlerMiddleware);
 
 const start = async () => {
   try {
-    // await connectDb(process.env.MONGO_URI);
+    await connectDb(process.env.MONGO_URI);
     app.listen(PORT, () => {
       console.log(`Server is listening on port: ${PORT}`);
     });
