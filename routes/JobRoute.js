@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const JobCtrl = require('../controller/JobCtrl');
+
 const { createJob, getJobs, getJob, updateJob, deleteJob } = JobCtrl;
 
 
