@@ -5,8 +5,27 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// security libraries
+const cors = require('cors');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimiter = require('express-rate-limit');
+
 const connectDb = require('./db/connect');
 
+// Security
+app.set('trust proxy', 1);
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 100
+  })
+);
+app.use(cors());
+app.use(helmet());
+app.use(xss());
+
+app.use(express.json());
 // Middleware
 const ErrorHandlerMiddleware = require('./middleware/error-handling');
 const NotFoundMiddleware = require('./middleware/route-not-found');
@@ -17,7 +36,6 @@ const UserRoute = require('./routes/UserRoute');
 const JobRoute = require('./routes/JobRoute');
 
 
-app.use(express.json());
 
 app.use('/api/v1/auth', UserRoute);
 app.use('/api/v1/job', AuthMiddleware, JobRoute);
